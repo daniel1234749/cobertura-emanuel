@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Reposición — Centro de Distribución</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__id">
+      <span class="topbar__mark">CD</span>
+      <div class="topbar__titles">
+        <h1>Panel de Reposición</h1>
+        <p>Stock en centro de distribución vs. sucursales — ventas últimos 30 días</p>
+      </div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__clock" id="clock"></div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema" title="Cambiar modo claro/oscuro">🌙</button>
+    </div>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Resumen de estados">
+    <button class="stat stat--quiebre" data-filter-estado="QUIEBRE">
+      <span class="stat__count" id="count-quiebre">0</span>
+      <span class="stat__label">Quiebre</span>
+      <span class="stat__hint">sucursal en cero, CD con stock</span>
+    </button>
+    <button class="stat stat--critico" data-filter-estado="CRITICO">
+      <span class="stat__count" id="count-critico">0</span>
+      <span class="stat__label">Crítico</span>
+      <span class="stat__hint">cobertura menor al 5%</span>
+    </button>
+    <button class="stat stat--alerta" data-filter-estado="ALERTA">
+      <span class="stat__count" id="count-alerta">0</span>
+      <span class="stat__label">Alerta</span>
+      <span class="stat__hint">3 días de cobertura o menos</span>
+    </button>
+    <button class="stat stat--total" data-filter-estado="">
+      <span class="stat__count" id="count-total">0</span>
+      <span class="stat__label">Total de filas</span>
+      <span class="stat__hint">todas las alertas activas</span>
+    </button>
+  </section>
+
+  <section class="controls">
+    <div class="field field--search">
+      <label for="search">Buscar</label>
+      <input type="text" id="search" placeholder="Código o nombre de producto…" autocomplete="off">
+    </div>
+    <div class="field field--familia">
+      <label for="familia-toggle">Familia</label>
+      <div class="multiselect" id="familia-multiselect">
+        <button type="button" class="multiselect__toggle" id="familia-toggle">Todas</button>
+        <div class="multiselect__panel multiselect__panel--scroll" id="familia-panel" hidden>
+          <div class="multiselect__search">
+            <input type="text" id="familia-search" placeholder="Buscar familia…">
+          </div>
+          <div id="familia-options"></div>
+          <button type="button" class="multiselect__done" id="familia-done">Listo</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="filter-sucursal">Sucursal</label>
+      <select id="filter-sucursal"><option value="">Todas</option></select>
+    </div>
+    <div class="field field--estado">
+      <label for="estado-toggle">Estado</label>
+      <div class="multiselect" id="estado-multiselect">
+        <button type="button" class="multiselect__toggle" id="estado-toggle">Todos</button>
+        <div class="multiselect__panel" id="estado-panel" hidden>
+          <label><input type="checkbox" value="QUIEBRE"> Quiebre</label>
+          <label><input type="checkbox" value="CRITICO"> Crítico</label>
+          <label><input type="checkbox" value="ALERTA"> Alerta</label>
+          <button type="button" class="multiselect__done" id="estado-done">Listo</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-reset" id="btn-reset" type="button">Limpiar filtros</button>
+    <button class="btn-print" id="btn-print" type="button">Imprimir</button>
+    <button class="btn-export" id="btn-export" type="button">Exportar Excel</button>
+    <label class="upload">
+      <input type="file" id="file-input" accept="application/json">
+      Cargar JSON…
+    </label>
+  </section>
+
+  <p class="print-title" id="print-title"></p>
+
+  <section class="table-wrap">
+    <table id="table">
+      <thead>
+        <tr>
+          <th data-key="estado" class="th-estado">Estado</th>
+          <th data-key="familia">Familia</th>
+          <th data-key="codigos">Código</th>
+          <th data-key="productos" class="th-producto">Producto</th>
+          <th data-key="uxb" class="th-num">UxB</th>
+          <th data-key="sucursal">Sucursal</th>
+          <th data-key="ventas_30dias" class="th-num">Ventas 30d</th>
+          <th data-key="stock_actual" class="th-num">Stock sucursal</th>
+          <th data-key="stock_centro_distribucion" class="th-num th-cd">Stock CD</th>
+          <th data-key="dias_cobertura_aprox" class="th-num">Días cobertura</th>
+          <th class="th-remove no-print">Quitar</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <p class="empty-state" id="empty-state" hidden>No hay filas que coincidan con los filtros actuales.</p>
+  </section>
+
+  <footer class="foot">
+    <span id="row-count">0 filas</span>
+    <span class="foot__sep">·</span>
+    <span id="excluded-note" hidden><span id="excluded-count">0</span> excluida(s) del reporte — <button type="button" id="btn-restore" class="link-btn">restaurar</button><span class="foot__sep">·</span></span>
+    <span>Actualizado al cargar el archivo <code>data.json</code></span>
+  </footer>
+
+<script src="app.js"></script>
+</body>
+</html>
