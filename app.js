@@ -10,6 +10,7 @@ const tbody = document.getElementById('table-body');
 const emptyState = document.getElementById('empty-state');
 const rowCountEl = document.getElementById('row-count');
 const clockEl = document.getElementById('clock');
+const lastUpdatedEl = document.getElementById('last-updated');
 const searchInput = document.getElementById('search');
 const sucursalSelect = document.getElementById('filter-sucursal');
 const btnReset = document.getElementById('btn-reset');
@@ -70,6 +71,19 @@ async function loadData(){
     const res = await fetch('data.json', { cache: 'no-store' });
     if(!res.ok) throw new Error('No se pudo leer data.json');
     rows = await res.json();
+
+    // El servidor (Live Server o GitHub Pages) informa cuándo se modificó
+    // el archivo por última vez, sin que haga falta escribirlo a mano.
+    const lastModified = res.headers.get('last-modified');
+    if(lastModified){
+      const d = new Date(lastModified);
+      const stamp = d.toLocaleString('es-AR', {
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      lastUpdatedEl.textContent = `Última actualización: ${stamp}`;
+    }else{
+      lastUpdatedEl.textContent = '';
+    }
   }catch(err){
     console.warn('No se pudo cargar data.json (¿estás abriendo el archivo directo, sin servidor? Usá Live Server).', err);
     rows = [];

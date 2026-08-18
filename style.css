@@ -101,7 +101,21 @@ body{
   color: var(--graphite-500);
 }
 
-.topbar__right{ display: flex; align-items: center; }
+.topbar__right{ display: flex; align-items: center; gap: 16px; }
+
+.topbar__meta{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.topbar__updated{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  min-height: 13px;
+}
 
 .theme-toggle{
   background: var(--graphite-850);
@@ -115,7 +129,7 @@ body{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 16px;
+  flex-shrink: 0;
 }
 .theme-toggle:hover{ border-color: var(--amber); }
 
