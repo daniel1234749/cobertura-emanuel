@@ -306,23 +306,6 @@ body{
 
 .print-title{ display: none; }
 
-.upload{
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--amber);
-  color: var(--graphite-950);
-  padding: 9px 14px;
-  border-radius: var(--radius);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  height: 37px;
-}
-.upload:hover{ background: #f0b25a; }
-.upload input{ display: none; }
-
 /* ---------- Table ---------- */
 .table-wrap{ padding: 0 28px 8px; overflow-x: auto; }
 
@@ -447,7 +430,6 @@ tr.is-excluded{ display: none; }
   .stats{ grid-template-columns: repeat(2, 1fr); }
   .controls{ flex-direction: column; align-items: stretch; }
   .field input, .field select{ min-width: 0; width: 100%; }
-  .upload{ margin-left: 0; justify-content: center; }
 }
 
 /* ---------- Print ---------- */
@@ -460,7 +442,7 @@ tr.is-excluded{ display: none; }
     color: #111418 !important;
   }
 
-  .topbar, .stats, .controls, .foot, .upload, .btn-print, .btn-reset, .btn-export, .no-print{
+  .topbar, .stats, .controls, .foot, .btn-print, .btn-reset, .btn-export, .no-print{
     display: none !important;
   }
 

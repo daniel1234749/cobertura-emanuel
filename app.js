@@ -13,7 +13,6 @@ const clockEl = document.getElementById('clock');
 const searchInput = document.getElementById('search');
 const sucursalSelect = document.getElementById('filter-sucursal');
 const btnReset = document.getElementById('btn-reset');
-const fileInput = document.getElementById('file-input');
 const statButtons = document.querySelectorAll('.stat');
 const btnPrint = document.getElementById('btn-print');
 const btnExport = document.getElementById('btn-export');
@@ -72,27 +71,10 @@ async function loadData(){
     if(!res.ok) throw new Error('No se pudo leer data.json');
     rows = await res.json();
   }catch(err){
-    console.warn('No se pudo cargar data.json automáticamente (¿estás abriendo el archivo directo, sin servidor?). Usá el botón "Cargar JSON…".', err);
+    console.warn('No se pudo cargar data.json (¿estás abriendo el archivo directo, sin servidor? Usá Live Server).', err);
     rows = [];
   }
   init();
-}
-
-function handleFileUpload(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    try{
-      rows = JSON.parse(evt.target.result);
-      excludedKeys = new Set();
-      filters.familias = new Set();
-      init();
-    }catch(err){
-      alert('El archivo no es un JSON válido.');
-    }
-  };
-  reader.readAsText(file);
 }
 
 // ---------- Row identity (for exclude/restore) ----------
@@ -410,9 +392,6 @@ btnRestore.addEventListener('click', () => {
   excludedKeys.clear();
   render();
 });
-
-// ---------- Events: file upload ----------
-fileInput.addEventListener('change', handleFileUpload);
 
 // ---------- Events: export to Excel ----------
 function excelNum(v){
